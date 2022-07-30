@@ -1,9 +1,15 @@
+require('dotenv').config();
+
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
+
+const { Tech } = require('./models');
+
+const techData = require('./seeds/techData.json');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -30,12 +36,30 @@ const startApolloServer = async (typeDefs, resolvers) => {
   server.applyMiddleware({ app });
   
   db.once('open', () => {
+    app.post('/seedDatabase', async (req, res) => {
+      // secure my seed route so only authorized users can do it!!!
+      // SEEDPASS=something inside of your env file or as a config variable in heroku
+      if(req.body.SEEDPASS === process.env.SEEDPASS){
+        await Tech.deleteMany({});
+
+        const technologies = await Tech.insertMany(techData);
+      
+        console.log('Technologies seeded!');
+        res.json(technologies);
+      
+      }
+      else{
+        res.json({test: "Turtle dies"});
+      }
+    });
+
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
       console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-    })
+    });
   })
   };
+
   
 // Call the async function to start the server
   startApolloServer(typeDefs, resolvers);
