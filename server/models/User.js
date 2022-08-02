@@ -24,6 +24,7 @@ const userSchema = new Schema({
 // TODO hooks for password updates/creations???
 userSchema.pre('save', function(next) {
   var user = this;
+  console.log({hookThis: user});
 
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
