@@ -7,9 +7,10 @@ const path = require('path');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
-const { Tech } = require('./models');
+const { User, Tech } = require('./models');
 
 const techData = require('./seeds/techData.json');
+const userData = require('./seeds/userData.json');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -41,10 +42,12 @@ const startApolloServer = async (typeDefs, resolvers) => {
       // SEEDPASS=something inside of your env file or as a config variable in heroku
       if(req.body.SEEDPASS === process.env.SEEDPASS){
         await Tech.deleteMany({});
+        await User.deleteMany({});
 
         const technologies = await Tech.insertMany(techData);
+        const users = await Tech.insertMany(userData);
       
-        console.log('Technologies seeded!');
+        console.log('All data seeded!');
         res.json(technologies);
       
       }
