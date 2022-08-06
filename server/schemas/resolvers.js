@@ -1,6 +1,7 @@
 const { User, Tech, Matchup } = require('../models');
 const { ObjectId } = require("mongoose").Types;
 const { AuthenticationError } = require('apollo-server-express');
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
