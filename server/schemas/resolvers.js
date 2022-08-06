@@ -19,7 +19,24 @@ const resolvers = {
 
     user: async (parent, { _id }) => {
       return User.findOne({_id: ObjectId(_id)});
+    },
+
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError('You need to be logged in!');
     }
+
+    // you will need to use insomnia a similar token from a previous login to get this working
+    // POST to /graphql
+    // {
+    // "token": "<token here>",
+    // "query": "query MyInfo{ me{ _id \nname \nemail }}",
+    // "operationName": "MyInfo",
+    // "variables": {}
+    // }
+
   },
   Mutation: {
     createMatchup: async (parent, args) => {
