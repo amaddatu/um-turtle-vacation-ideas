@@ -23,12 +23,23 @@ class AuthService {
     return localStorage.getItem('id_token');
   }
 
-  login(idToken) {
+  login(appState, setAppState, idToken, formData, navigate) {
+    setAppState({
+      ...appState,
+      user: {...formData.login.user},
+      logged_in: true
+    });
     localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+    navigate("/", {replace: true})
+    // window.location.assign('/');
   }
 
-  logout() {
+  logout(appState, setAppState) {
+    setAppState({
+      ...appState,
+      user: null,
+      logged_in: false
+    });
     localStorage.removeItem('id_token');
     window.location.reload();
   }

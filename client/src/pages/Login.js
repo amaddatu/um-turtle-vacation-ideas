@@ -2,13 +2,29 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import LoginForm from '../components/LoginForm';
 import {QUERY_ME} from '../utils/queries';
+import { useEffect } from 'react';
 
-const Login = () => {
+
+const Login = (props) => {
+  console.log(props);
+  const {appState, setAppState} = props;
   const { loading, data } = useQuery(QUERY_ME, {
     fetchPolicy: "no-cache"
   });
 
   const me = data?.me || {};
+
+  useEffect( () => {
+    if(me && me.hasOwnProperty("_id")){
+      if(appState.user === null || me._id !== appState.user._id ){
+        setAppState({
+          ...appState,
+          user: {...me},
+          logged_in: true
+        });
+      }
+    }
+  }); // want to update state on any change
 
   return (
     <div className="card bg-white card-rounded w-50">
@@ -20,7 +36,7 @@ const Login = () => {
           <div>Loading...</div>
         ) : (
           <>
-            { me.hasOwnProperty("_id") ? (
+            { me && me.hasOwnProperty("_id") ? (
               <ul className="square">
                   {/*logged in */}
                     <li>{me.name} is logged in</li>  
@@ -28,7 +44,7 @@ const Login = () => {
               </ul>
             ) : (
               <>{/*Not Logged in - need form*/}
-                <LoginForm />
+                <LoginForm appState={appState} setAppState={setAppState} />
               </>
             )}
           </>
