@@ -30,7 +30,11 @@ class AuthService {
       logged_in: true
     });
     localStorage.setItem('id_token', idToken);
-    navigate("/", {replace: true})
+    
+    // prevents a complete refresh of the site
+    // allows react state to stay intact
+    // it hooks in to react router provider to change the page
+    navigate("/", {replace: true}) 
     // window.location.assign('/');
   }
 
