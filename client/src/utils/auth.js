@@ -1,4 +1,5 @@
 import decode from 'jwt-decode';
+import {LOGIN, LOGOUT} from '../context/actions';
 
 class AuthService {
   getProfile() {
@@ -23,12 +24,9 @@ class AuthService {
     return localStorage.getItem('id_token');
   }
 
-  login(appState, setAppState, idToken, formData, navigate) {
-    setAppState({
-      ...appState,
-      user: {...formData.login.user},
-      logged_in: true
-    });
+  login(dispatch, idToken, formData, navigate) {
+    // using context's dispatch
+    dispatch({type: LOGIN, payload: formData.login.user});
     localStorage.setItem('id_token', idToken);
     
     // prevents a complete refresh of the site
@@ -38,12 +36,9 @@ class AuthService {
     // window.location.assign('/');
   }
 
-  logout(appState, setAppState) {
-    setAppState({
-      ...appState,
-      user: null,
-      logged_in: false
-    });
+  logout(dispatch) {
+    // using context's dispatch
+    dispatch({type: LOGOUT});
     localStorage.removeItem('id_token');
     window.location.reload();
   }

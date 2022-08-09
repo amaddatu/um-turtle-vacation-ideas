@@ -2,12 +2,17 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import LoginForm from '../components/LoginForm';
 import {QUERY_ME} from '../utils/queries';
-import { useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
+import { useUser } from '../context/UserContext';
+import reducer from '../context/reducers';
+import {LOGIN, LOGOUT} from '../context/actions';
 
 
-const Login = (props) => {
-  console.log(props);
-  const {appState, setAppState} = props;
+const Login = () => {
+  const initialState = useUser();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  // console.log(props);
+  // const {appState, setAppState} = props;
   const { loading, data } = useQuery(QUERY_ME, {
     fetchPolicy: "no-cache"
   });
@@ -16,12 +21,8 @@ const Login = (props) => {
 
   useEffect( () => {
     if(me && me.hasOwnProperty("_id")){
-      if(appState.user === null || me._id !== appState.user._id ){
-        setAppState({
-          ...appState,
-          user: {...me},
-          logged_in: true
-        });
+      if(state.user === null || me._id !== state.user._id ){
+        dispatch({type: LOGIN, payload: me});
       }
     }
   }); // want to update state on any change
@@ -44,7 +45,7 @@ const Login = (props) => {
               </ul>
             ) : (
               <>{/*Not Logged in - need form*/}
-                <LoginForm appState={appState} setAppState={setAppState} />
+                <LoginForm/>
               </>
             )}
           </>

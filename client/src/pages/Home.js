@@ -1,10 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_MATCHUPS, QUERY_ME } from '../utils/queries';
 import Auth from '../utils/auth';
+import { useUser } from '../context/UserContext';
+import reducer from '../context/reducers';
+import {LOGIN, LOGOUT} from '../context/actions';
 
-const Home = ({appState, setAppState}) => {
+const Home = () => {
+  const initialState = useUser();
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { loading, data } = useQuery(QUERY_MATCHUPS, {
     fetchPolicy: "no-cache"
   });
@@ -13,7 +18,7 @@ const Home = ({appState, setAppState}) => {
   const logout = (event) =>{
     event.preventDefault();
 
-    Auth.logout(appState, setAppState);
+    Auth.logout(dispatch);
   }
 
   
@@ -26,12 +31,8 @@ const Home = ({appState, setAppState}) => {
 
   useEffect( () => {
     if(me && me.hasOwnProperty("_id")){
-      if(appState.user === null || me._id !== appState.user._id ){
-        setAppState({
-          ...appState,
-          user: {...me},
-          logged_in: true
-        });
+      if(state.user === null || me._id !== state.user._id ){
+        dispatch({type: LOGIN, payload: me});
       }
     }
   }); // want to update state on any change
@@ -39,7 +40,7 @@ const Home = ({appState, setAppState}) => {
     <div className="card bg-white card-rounded w-50">
       <div className="card-header bg-dark text-center">
         <h1>Welcome to Tech Matchup!</h1>
-        <Link to="/login">{ appState.logged_in ? "Profile" : "Login" }</Link><br />
+        <Link to="/login">{ state.logged_in ? "Profile" : "Login" }</Link><br />
         <a href="/logout" onClick={logout}>Logout</a>
       </div>
       <div className="card-body m-5">

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { 
   ApolloClient,
@@ -13,6 +13,8 @@ import Vote from './pages/Vote';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import 'bootstrap/dist/css/bootstrap.css';
+
+import UserProvider from './context/UserContext';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -36,45 +38,44 @@ const client = new ApolloClient({
 });
 
 function App() {
-  const [appState, setAppState] = useState({
-    user: null,
-    logged_in: false
-  });
+  
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="flex-column justify-center align-center min-100-vh bg-primary">
-          <Routes>
-            <Route 
-              path="/" 
-              element={<Home appState={appState} setAppState={setAppState} />}
-            />
-            <Route 
-              path="/users" 
-              element={<Users />}
-            />
-            <Route 
-              path="/login" 
-              // component={Login}
-              element={(
-                <Login appState={appState} setAppState={setAppState} />
-              )}
-              
-            />
-            <Route 
-              path="/matchup" 
-              element={<Matchup />}
-            />
-            <Route 
-              path="/matchup/:id" 
-              element={<Vote />}
-            />
-            <Route 
-              path="*"
-              element={<NotFound />}
-            />
-          </Routes>
-        </div>
+        <UserProvider>
+          <div className="flex-column justify-center align-center min-100-vh bg-primary">
+            <Routes>
+              <Route 
+                path="/" 
+                element={<Home />}
+              />
+              <Route 
+                path="/users" 
+                element={<Users />}
+              />
+              <Route 
+                path="/login" 
+                // component={Login}
+                element={(
+                  <Login />
+                )}
+                
+              />
+              <Route 
+                path="/matchup" 
+                element={<Matchup />}
+              />
+              <Route 
+                path="/matchup/:id" 
+                element={<Vote />}
+              />
+              <Route 
+                path="*"
+                element={<NotFound />}
+              />
+            </Routes>
+          </div>
+        </UserProvider>
       </Router>
     </ApolloProvider>
   );

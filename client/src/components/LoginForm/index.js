@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useReducer} from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
 import Auth from '../../utils/auth';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
+import reducer from '../../context/reducers';
 
-const LoginForm = ({appState, setAppState}) => {
+const LoginForm = () => {
   const [login, { error, data }] = useMutation(LOGIN_USER);
   let navigate = useNavigate();
+  const initialState = useUser();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const [formState, setFormState] = useState({
     email: "turtle@turtle.com",
@@ -30,7 +34,7 @@ const LoginForm = ({appState, setAppState}) => {
       variables: {...formState}
     });
     console.log(result);
-    Auth.login(appState, setAppState, result.data.login.token, result.data, navigate);
+    Auth.login(dispatch, result.data.login.token, result.data, navigate);
   }
   return (
     <form onSubmit={onFormSubmit}>
