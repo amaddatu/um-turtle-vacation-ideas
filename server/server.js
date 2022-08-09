@@ -47,10 +47,10 @@ const startApolloServer = async (typeDefs, resolvers) => {
         await User.deleteMany({});
 
         const technologies = await Tech.insertMany(techData);
-        const users = await Tech.insertMany(userData);
+        const users = await User.insertMany(userData);
       
         console.log('All data seeded!');
-        res.json(technologies);
+        res.json({message: "Database Seeded", technologies, users});
       
       }
       else{
