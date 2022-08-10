@@ -4,7 +4,9 @@ const secret = process.env.JWT_SECRET;
 const expiration = process.env.JWT_EXPIRATION || '2h';
 
 module.exports = {
-  authMiddleware: function ({ req }) {
+  authMiddleware: function ({ req/*, res */ }) {
+    console.log(req);
+
     // allows token to be sent via req.body, req.query, or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
 
