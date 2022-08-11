@@ -12,6 +12,7 @@ import Matchup from './pages/Matchup';
 import Vote from './pages/Vote';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
+import UserForm from './pages/UserForm';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import UserProvider from './context/UserContext';
@@ -48,6 +49,10 @@ function App() {
               <Route 
                 path="/" 
                 element={<Home />}
+              />
+              <Route 
+                path="/signup" 
+                element={<UserForm />}
               />
               <Route 
                 path="/users" 
