@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "seed": "node seeds/seed.js",
-    "watch": "nodemon server.js"
+    "watch": "nodemon server.js",
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "mongoose": "^6.1.8"
   },
   "devDependencies": {
+    "mocha": "^10.0.0",
     "nodemon": "^2.0.6"
   }
 }
