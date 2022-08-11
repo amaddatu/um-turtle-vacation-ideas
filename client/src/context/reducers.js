@@ -17,6 +17,11 @@ const reducers = (state, {type, payload}) => {
         user: null,
         logged_in: false
       };
+    case ADD1:
+      return {
+        ...state,
+        count: ( state.count ? state.count + 1 : 1 )
+      };
     default:
       return state;
   }
