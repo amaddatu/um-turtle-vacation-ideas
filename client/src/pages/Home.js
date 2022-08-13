@@ -37,7 +37,16 @@ const Home = () => {
       <div className="card-header bg-dark text-center">
         <h1>Welcome to Tech Matchup!</h1>
         <Link to="/login">{ state.logged_in ? "Profile" : "Login" }</Link><br />
-        <a href="/logout" onClick={logout}>Logout</a>
+        <a href="/logout" onClick={logout}>Logout</a><br/>
+        { state.logged_in ? (
+          <></>
+        ) : (
+          <>
+            <Link to="/signup">Sign Up</Link>
+            <br />
+          </>
+        )}
+        
       </div>
     </div>
   );
