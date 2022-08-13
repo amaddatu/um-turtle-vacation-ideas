@@ -21,7 +21,7 @@ const typeDefs = gql`
     # no password field, need to keep passwords hidden
   }
   type TokenUser {
-    token: String
+    token: ID!
     user: User
   }
 
@@ -40,7 +40,8 @@ const typeDefs = gql`
     createMatchup(tech1: String!, tech2: String!): Matchup
     createVote(_id: String!, techNum: Int!): Matchup
 
-    createUser(name: String!, email: String!, password: String!): User
+    createUser(name: String!, email: String!, password: String!): TokenUser
+    createUserNoToken(name: String!, email: String!, password: String!): User
     login(email: String!, password: String!): TokenUser
   }
 `;

@@ -54,6 +54,14 @@ const resolvers = {
     createUser: async (parent, {name, email, password}) => {
       const user = await User.create({name, email, password});
 
+      const token = signToken(user);
+      return {
+        token: token,
+        user: user
+      };
+    },
+    createUserNoToken: async (parent, {name, email, password}) => {
+      const user = await User.create({name, email, password});
       return user;
     },
 
