@@ -25,6 +25,15 @@ const typeDefs = gql`
     user: User
   }
 
+  type Tomato {
+    turtle: Turtle
+    user: User
+  }
+  type Turtle{
+    name: String
+    attributes: [String]
+  }
+
   type Query {
     tech: [Tech]
     matchups(_id: String): [Matchup]
@@ -33,6 +42,7 @@ const typeDefs = gql`
     user(_id: String!): User
 
     me: User
+    tomatoMyself: Tomato
   }
 
 

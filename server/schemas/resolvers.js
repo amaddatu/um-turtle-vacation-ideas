@@ -26,7 +26,24 @@ const resolvers = {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('You need to be logged in!');
-    }
+    },
+    tomatoMyself: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findOne({ _id: context.user._id });
+        return {
+          turtle: {
+            name: "Tomato",
+            attributes: [
+              "Sweet",
+              "Slow",
+              "Red"
+            ]
+          },
+          user: user
+        }
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
 
     // you will need to use insomnia a similar token from a previous login to get this working
     // POST to /graphql
