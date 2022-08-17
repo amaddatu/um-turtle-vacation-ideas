@@ -26,7 +26,7 @@ const resolvers = {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('You need to be logged in!');
-    }
+    },
 
     // you will need to use insomnia a similar token from a previous login to get this working
     // POST to /graphql
@@ -37,6 +37,19 @@ const resolvers = {
     // "variables": {}
     // }
 
+    test: async () =>{
+      // Dog{
+      //   _id: ID!
+      //   name: String
+      // }
+
+      // later on, when we have the Dog model, we can replace this test data with
+      // the Dog model
+      return {
+        _id: "0001",
+        name: "Test Dog"
+      };
+    }
   },
   Mutation: {
     createMatchup: async (parent, args) => {

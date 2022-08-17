@@ -24,6 +24,10 @@ const typeDefs = gql`
     token: ID!
     user: User
   }
+  type Dog{
+    _id: ID!
+    name: String
+  }
 
   type Query {
     tech: [Tech]
@@ -33,6 +37,7 @@ const typeDefs = gql`
     user(_id: String!): User
 
     me: User
+    test: Dog
   }
 
 
